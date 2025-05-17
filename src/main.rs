@@ -57,6 +57,11 @@ async fn update(pool: web::Data<SqlitePool>, form: web::Form<Task>) -> HttpRespo
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // Get host and IP from environment variables or use defaults
+    let host = std::env::var("HOST").unwrap_or_else(|_| "localhost".to_string());
+    let port = std::env::var("PORT").unwrap_or_else(|_| "8080".to_string());
+    let bind_address = format!("{}:{}", host, port);
+
     let pool = SqlitePool::connect("sqlite::memory:").await.unwrap();
 
     sqlx::query("CREATE TABLE tasks (task TEXT)")
@@ -72,19 +77,15 @@ async fn main() -> std::io::Result<()> {
         .execute(&pool)
         .await
         .unwrap();
-    sqlx::query("INSERT INTO tasks (task) VALUES ('Task 3')")
-        .execute(&pool)
-        .await
-        .unwrap();
 
-    println!("Server running at localhost:8080");
+    println!("Server running at {bind_address}");
     HttpServer::new(move || {
         App::new()
             .service(todo)
             .service(update)
             .app_data(web::Data::new(pool.clone()))
     })
-    .bind("localhost:8080")?
+    .bind(bind_address)?
     .run()
     .await
 }
