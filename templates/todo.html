@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Todo List</title>
+    </head>
+    <body>
+        <h1>Todo List</h1>
+        <form action="/update" method="post">
+            <ul>
+                {% for task in tasks %}
+                    <li>
+                        {{ task }}
+                        <button type="submit" name="id" value="{{ task }}">
+                            Done
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <input type="text" name="task" placeholder="New task">
+            <button type="submit" name="action">作成</button>
+        </form>
+    </body>
+</html>
