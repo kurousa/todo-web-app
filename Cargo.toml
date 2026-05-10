@@ -8,4 +8,4 @@ actix-web = "4"
 askama = "0.12"
 askama_actix = "0.14"
 serde = { version = "1", features = ["derive"] }
-sqlx = { version = "0.7.3", features = ["sqlite", "runtime-tokio"] }
+sqlx = { version = "0.8.1", features = ["sqlite", "runtime-tokio"] }
